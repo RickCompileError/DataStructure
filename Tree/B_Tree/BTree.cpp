@@ -62,7 +62,8 @@ void BTree::traverse(){
         q.pop();
         cout <<"[" <<tmp.second <<"]: ";
         tmp.first->traverse();
-        for (int i=0;i<=tmp.first->quantity;i++)
-            q.push(make_pair(tmp.first->childs[i], tmp.second+1));
+        if (!tmp.first->isLeaf)
+            for (int i=0;i<=tmp.first->quantity;i++)
+                q.push(make_pair(tmp.first->childs[i], tmp.second+1));
     }
 }
