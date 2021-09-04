@@ -21,7 +21,7 @@ void BTree::insert(int v){
             Node *tmp = new Node(degree, false);
             tmp->childs[0] = root;
             tmp->split(0, root);
-            // choose which child inserted value should go
+            // choose which child where value should go
             int i = 0;
             if (tmp->keys[0]<v) i = 1;
             tmp->childs[i]->insertNonFull(v);
@@ -37,6 +37,10 @@ void BTree::deleteNode(int v){
         return;
     }
     root->remove(v);
+    // after deleted, root might satisfy following condition
+    // the meaning of two possible situations are
+    // 1. tree is null after deleting
+    // 2. parent is empty, redirecting root to the child[0] is necessary
     if (root->quantity==0){
         Node *tmp = root;
         if (root->isLeaf) root = NULL;
@@ -47,7 +51,7 @@ void BTree::deleteNode(int v){
 }
 
 Node* BTree::search(int v){
-    return NULL;
+    return (root==NULL)?NULL:root->search(v);
 }
 
 void BTree::traverse(){
