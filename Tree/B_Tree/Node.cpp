@@ -92,7 +92,7 @@ void Node::removeFromNonLeaf(int idx){
     else if (childs[idx+1]->quantity>=degree){
         int successor = getSuccessor(idx);
         keys[idx] = successor;
-        childs[idx]->remove(successor);
+        childs[idx+1]->remove(successor);
     }
     // both sides have no enough key, then merge two sides
     else{
@@ -104,14 +104,14 @@ void Node::removeFromNonLeaf(int idx){
 
 int Node::getPredecessor(int idx){
     // get the largest value in node's predecessor
-    Node *tmp = childs[idx+1];
+    Node *tmp = childs[idx];
     while (!tmp->isLeaf) tmp = tmp->childs[quantity];
     return tmp->keys[quantity-1];
 }
 
 int Node::getSuccessor(int idx){
     // get the smallest value in node's successor
-    Node *tmp = childs[idx];
+    Node *tmp = childs[idx+1];
     while (!tmp->isLeaf) tmp = tmp->childs[0];
     return tmp->keys[0];
 }
