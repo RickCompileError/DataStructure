@@ -1,3 +1,6 @@
+// Preprocess -> O(n)
+// Query -> O(lgn)
+// update -> O(lgn)
 #include <bits/stdc++.h>
 
 #define sz(x) (int)x.size()
