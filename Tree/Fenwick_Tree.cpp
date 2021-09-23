@@ -36,7 +36,8 @@ one-based indexing approach: (Due to the function's property, we can't use idx 0
 
 using namespace std;
 
-class Fenwick_Tree{
+// for point update and range query
+class Fenwick_Tree1{
 private:
     vector<int> vsum;
     vector<int> vmin;
@@ -44,13 +45,13 @@ private:
     int sz;
     const int INF = 0x3f3f3f3f;
 public:
-    Fenwick_Tree(int n){
+    Fenwick_Tree1(int n){
         sz = n;
         vsum.assign(sz, 0);
         vmin.assign(sz, INF);
         vmax.assign(sz, 0);      
     }
-    Fenwick_Tree(vector<int> v): Fenwick_Tree(v.size()){
+    Fenwick_Tree1(vector<int> v): Fenwick_Tree1(v.size()){
         for (int i=0;i<sz;i++) update(i, v[i]);
     }
     void update(int idx, int val){
@@ -60,6 +61,10 @@ public:
             vmax[idx] = max(vmax[idx], val);
             idx = idx | (idx+1);
         }
+    }
+    void rangeUpdate(int l, int r, int val){
+        update(l, val);
+        update(r+1, -val);
     }
     int getSum(int idx){
         int res = 0;
@@ -90,9 +95,46 @@ public:
     }
 };
 
+// for range update and point query, need to be initialized with zero
+class Fenwick_Tree2{
+private:
+    vector<int> vsum;
+    int sz;
+public:
+    Fenwick_Tree2(int n){
+        sz = n+1;
+        vsum.assign(sz, 0);   
+    }
+    void update(int idx, int val){
+        idx++;
+        while (idx<sz){
+            vsum[idx] += val;
+            idx += (idx & -idx);
+        }
+    }
+    void rangeUpdate(int l, int r, int val){
+        update(l, val);
+        update(r+1, -val);
+    }
+    int query(int idx){
+        idx++;
+        int sum = 0;
+        while (idx>0){
+            sum += vsum[idx];
+            idx -= (idx & -idx);
+        }
+        return sum;
+    }
+};
+
 int main(){
-    Fenwick_Tree ft({1,2,3,4,5,6,7,8});
-    cout <<ft.getSum(4, 6) <<endl;
-    cout <<ft.getMin(3) <<endl;
-    cout <<ft.getMax(7) <<endl;
+    Fenwick_Tree1 ft1({1,2,3,4,5,6,7,8});
+    cout <<ft1.getSum(4, 6) <<endl;
+    cout <<ft1.getMin(3) <<endl;
+    cout <<ft1.getMax(7) <<endl;
+    Fenwick_Tree2 ft2(8);
+    ft2.rangeUpdate(1,3,5);
+    ft2.rangeUpdate(1,7,10);
+    cout <<ft2.query(2) <<endl;
+    cout <<ft2.query(6) <<endl;
 }
